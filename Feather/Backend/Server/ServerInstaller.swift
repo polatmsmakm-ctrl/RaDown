@@ -102,7 +102,9 @@ class ServerInstaller: Identifiable, ObservableObject {
 	}
 		
 	func getServerMethod() -> Int {
-		UserDefaults.standard.integer(forKey: "Feather.serverMethod")
+		// RaDown: default to Semi Local (1). Fully Local opens itms-services
+		// from the app, which recent iOS blocks without extra entitlements.
+		UserDefaults.standard.object(forKey: "Feather.serverMethod") as? Int ?? 1
 	}
 	
 	func getIPFix() -> Bool {
