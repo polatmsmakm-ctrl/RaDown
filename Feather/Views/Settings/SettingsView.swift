@@ -10,6 +10,7 @@ import NimbleViews
 import UIKit
 import Darwin
 import IDeviceSwift
+import Zip
 
 // MARK: - View
 struct SettingsView: View {
@@ -137,8 +138,56 @@ extension SettingsView {
 			Button(.localized("Open Certificates"), systemImage: "folder") {
 				UIApplication.open(FileManager.default.certificates.toSharedDocumentsURL()!)
 			}
+			Button(.localized("Export Backup"), systemImage: "square.and.arrow.up.on.square") {
+				_exportBackup()
+			}
 		} footer: {
 			Text(.localized("All of the apps files are contained in the documents directory, here are some quick links to these."))
+		}
+	}
+	
+	/// RaDown: zips the certificates and imported IPAs and opens the share
+	/// sheet, so they can be saved to Files or iCloud. To restore, import the
+	/// certificate files and IPAs again.
+	private func _exportBackup() {
+		let fileManager = FileManager.default
+		let paths = [fileManager.certificates, fileManager.unsigned]
+			.filter { fileManager.fileExists(atPath: $0.path) }
+		
+		guard !paths.isEmpty else {
+			UIAlertController.showAlertWithOk(
+				title: .localized("Export Backup"),
+				message: .localized("Nothing to back up yet.")
+			)
+			return
+		}
+		
+		let formatter = DateFormatter()
+		formatter.dateFormat = "yyyy-MM-dd"
+		let zipURL = fileManager.temporaryDirectory
+			.appendingPathComponent("RaDown-Backup-\(formatter.string(from: Date())).zip")
+		
+		Task.detached {
+			do {
+				try? FileManager.default.removeItem(at: zipURL)
+				try await Zip.zipFiles(
+					paths: paths,
+					zipFilePath: zipURL,
+					password: nil,
+					compression: .BestSpeed,
+					progress: { _ in }
+				)
+				await MainActor.run {
+					UIActivityViewController.show(activityItems: [zipURL])
+				}
+			} catch {
+				await MainActor.run {
+					UIAlertController.showAlertWithOk(
+						title: .localized("Export Backup"),
+						message: error.localizedDescription
+					)
+				}
+			}
 		}
 	}
 }

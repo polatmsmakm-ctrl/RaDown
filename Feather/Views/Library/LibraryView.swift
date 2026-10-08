@@ -68,6 +68,14 @@ struct LibraryView: View {
 		animation: .snappy
 	) private var _sources: FetchedResults<AltSource>
 	
+	// RaDown: Re-sign All
+	@FetchRequest(
+		entity: CertificatePair.entity(),
+		sortDescriptors: [NSSortDescriptor(keyPath: \CertificatePair.date, ascending: false)],
+		animation: .snappy
+	) private var _certificates: FetchedResults<CertificatePair>
+	@State private var _resignProgress: String? = nil
+	
 	// MARK: Body
 	var body: some View {
 		NBNavigationView(.localized("Library")) {
@@ -121,6 +129,21 @@ struct LibraryView: View {
 				}
 			}
 			.scrollDismissesKeyboard(.interactively)
+			.overlay(alignment: .bottom) {
+				if let progress = _resignProgress {
+					HStack(spacing: 10) {
+						ProgressView()
+						Text(progress)
+							.font(.subheadline.weight(.semibold))
+					}
+					.padding(.horizontal, 18)
+					.padding(.vertical, 12)
+					.background(.regularMaterial, in: Capsule())
+					.padding(.bottom, 24)
+					.transition(.move(edge: .bottom).combined(with: .opacity))
+				}
+			}
+			.animation(.smooth, value: _resignProgress)
 			.overlay {
 				if
 					_filteredSignedApps.isEmpty,
@@ -250,6 +273,63 @@ extension LibraryView {
 		}
 		Button(.localized("Import from URL"), systemImage: "globe") {
 			_isDownloadingPresenting = true
+		}
+		
+		if !_importedApps.isEmpty {
+			Divider()
+			Button(.localized("Re-sign All"), systemImage: "signature") {
+				_resignAll()
+			}
+			.disabled(_resignProgress != nil)
+		}
+	}
+}
+
+// MARK: - Extension: Re-sign All (RaDown)
+extension LibraryView {
+	/// Signs every imported app again with the selected certificate, one after
+	/// another, each with the options last used for it.
+	private func _resignAll() {
+		let apps: [Imported] = Array(_importedApps)
+		guard !apps.isEmpty else { return }
+		
+		let index = UserDefaults.standard.integer(forKey: "feather.selectedCert")
+		guard _certificates.indices.contains(index) else {
+			UIAlertController.showAlertWithOk(
+				title: .localized("No Certificate"),
+				message: .localized("Please go to settings and import a valid certificate")
+			)
+			return
+		}
+		
+		_signNext(apps, at: 0, certificate: _certificates[index], failed: [])
+	}
+	
+	private func _signNext(_ apps: [Imported], at index: Int, certificate: CertificatePair, failed: [String]) {
+		guard index < apps.count else {
+			_resignProgress = nil
+			var message = String.localized("Signed %lld of %lld apps.", arguments: apps.count - failed.count, apps.count)
+			if !failed.isEmpty {
+				message += "\n" + failed.joined(separator: ", ")
+			}
+			UIAlertController.showAlertWithOk(title: .localized("Re-sign All"), message: message)
+			return
+		}
+		
+		let app = apps[index]
+		_resignProgress = String.localized("Signing %lld of %lld", arguments: index + 1, apps.count)
+		
+		FR.signPackageFile(
+			app,
+			using: RaDownAppPresets.options(for: app.identifier),
+			icon: nil,
+			certificate: certificate
+		) { error in
+			var failed = failed
+			if error != nil {
+				failed.append(app.name ?? app.identifier ?? "?")
+			}
+			_signNext(apps, at: index + 1, certificate: certificate, failed: failed)
 		}
 	}
 }

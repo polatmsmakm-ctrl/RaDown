@@ -91,6 +91,7 @@ struct SigningView: View {
 					placement: .topBarTrailing
 				) {
 					_temporaryOptions = OptionsManager.shared.options
+					RaDownAppPresets.remove(for: app.identifier)
 					appIcon = nil
 				}
 			}
@@ -120,6 +121,11 @@ struct SigningView: View {
 			.animation(.smooth, value: _isSigning)
 		}
 		.onAppear {
+			// RaDown: start from the options last used for this app
+			if let preset = RaDownAppPresets.load(for: app.identifier) {
+				_temporaryOptions = preset
+			}
+			
 			// ppq protection
 			if
 				_optionsManager.options.ppqProtection,
@@ -317,6 +323,8 @@ extension SigningView {
 					actions: [ok]
 				)
 			} else {
+				RaDownAppPresets.save(_temporaryOptions, for: app.identifier)
+				
 				if
 					_temporaryOptions.post_deleteAppAfterSigned,
 					!app.isSigned

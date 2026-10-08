@@ -19,6 +19,16 @@ struct FeatherApp: App {
 	@StateObject var downloadManager = DownloadManager.shared
 	let storage = Storage.shared
 	
+	init() {
+		// RaDown: Arabic interface by default, applied once. It can be changed
+		// later from iOS Settings → RaDown → Language.
+		let key = "RaDown.didApplyDefaultLanguage"
+		if !UserDefaults.standard.bool(forKey: key) {
+			UserDefaults.standard.set(["ar"], forKey: "AppleLanguages")
+			UserDefaults.standard.set(true, forKey: key)
+		}
+	}
+	
 	var body: some Scene {
 		WindowGroup {
 			VStack {

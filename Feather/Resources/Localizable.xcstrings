@@ -2684,6 +2684,12 @@
     "Change Nickname" : {
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تغيير الاسم المستعار"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2719,6 +2725,12 @@
     "Check for Updates" : {
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التحقق من التحديثات"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4152,6 +4164,12 @@
     "Disable Liquid Glass" : {
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعطيل Liquid Glass"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4335,6 +4353,12 @@
     "Do you want to download and install this file?" : {
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تبي تنزّل هذا الملف وتثبّته؟"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4644,6 +4668,12 @@
     "Download Update" : {
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنزيل التحديث"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8807,6 +8837,12 @@
     "Install Current Version" : {
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تثبيت النسخة الحالية"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9274,6 +9310,12 @@
     "Less" : {
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أقل"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9511,6 +9553,12 @@
     "Merge Entitlements" : {
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دمج الصلاحيات"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17388,6 +17436,12 @@
     "This option merges entitlements with the embedded entitlements from the app you're signing." : {
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هذا الخيار يدمج الصلاحيات مع الصلاحيات الموجودة داخل التطبيق اللي توقّعه."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17802,6 +17856,12 @@
     "Update" : {
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحديث"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17819,6 +17879,12 @@
     "Update Available" : {
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فيه تحديث"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18624,6 +18690,159 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "配对文件不可用并且与设备不匹配，请导入可用的的配置文件。"
+          }
+        }
+      }
+    },
+    "Duplicate App" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تكرار التطبيق"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplicate App"
+          }
+        }
+      }
+    },
+    "Duplicate App gives this copy its own identifier and name, so it installs next to the original instead of replacing it." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تكرار التطبيق يعطي النسخة معرّف واسم خاص فيها، فتتثبت جنب الأصلي بدل ما تستبدله."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplicate App gives this copy its own identifier and name, so it installs next to the original instead of replacing it."
+          }
+        }
+      }
+    },
+    "Remove Device Limitations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إزالة قيود الجهاز"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Device Limitations"
+          }
+        }
+      }
+    },
+    "Fix White Icon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إصلاح الأيقونة البيضاء"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fix White Icon"
+          }
+        }
+      }
+    },
+    "Re-sign All" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة توقيع الكل"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Re-sign All"
+          }
+        }
+      }
+    },
+    "Signed %lld of %lld apps." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم توقيع %lld من %lld تطبيق."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signed %lld of %lld apps."
+          }
+        }
+      }
+    },
+    "Signing %lld of %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جاري توقيع %lld من %lld"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signing %lld of %lld"
+          }
+        }
+      }
+    },
+    "Export Backup" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تصدير نسخة احتياطية"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export Backup"
+          }
+        }
+      }
+    },
+    "Nothing to back up yet." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما فيه شي ينحفظ للحين."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing to back up yet."
           }
         }
       }
