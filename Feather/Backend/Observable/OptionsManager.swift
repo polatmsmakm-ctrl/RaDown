@@ -119,6 +119,10 @@ struct Options: Codable, Equatable {
 	var injectIntoExtensions: Bool
 	/// If app should merge entitlements with the binary.
 	var mergeEntitlements: Bool
+	/// RaDown: remove device restrictions (supported devices, required capabilities) and allow iPhone + iPad
+	var removeDeviceLimitations: Bool
+	/// RaDown: point the primary icon at the icon images inside the app, fixing blank/white icons
+	var fixWhiteIcon: Bool
 
 	// MARK: Experiments
 	
@@ -166,6 +170,8 @@ struct Options: Codable, Equatable {
 		changeLanguageFilesForCustomDisplayName: false,
 		injectIntoExtensions: false,
 		mergeEntitlements: false,
+		removeDeviceLimitations: true,
+		fixWhiteIcon: false,
 		
 		// MARK: Experiments
 		

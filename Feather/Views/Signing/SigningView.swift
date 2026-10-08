@@ -186,7 +186,28 @@ extension SigningView {
 					bindingValue: $_temporaryOptions.appVersion
 				)
 			}
+			
+			// RaDown: install another copy of the same app beside the original
+			Button {
+				_makeDuplicate(of: app)
+			} label: {
+				Label(.localized("Duplicate App"), systemImage: "plus.square.on.square")
+			}
+		} footer: {
+			Text(.localized("Duplicate App gives this copy its own identifier and name, so it installs next to the original instead of replacing it."))
 		}
+	}
+	
+	/// Picks the next free copy number for this app and applies it to the
+	/// identifier and name (e.g. `com.example.app.copy2` / `Example 2`).
+	private func _makeDuplicate(of app: AppInfoPresentable) {
+		let baseIdentifier = app.identifier ?? "app"
+		let key = "RaDown.duplicateCount.\(baseIdentifier)"
+		let copyNumber = max(UserDefaults.standard.integer(forKey: key), 1) + 1
+		UserDefaults.standard.set(copyNumber, forKey: key)
+		
+		_temporaryOptions.appIdentifier = "\(baseIdentifier).copy\(copyNumber)"
+		_temporaryOptions.appName = "\(app.name ?? "App") \(copyNumber)"
 	}
 	
 	@ViewBuilder

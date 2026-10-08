@@ -213,6 +213,21 @@ extension SigningHandler {
 			infoDictionary.removeObject(forKey: "UISupportedDevices")
 		}
 		
+		// RaDown: Remove Device Limitations
+		if options.removeDeviceLimitations {
+			infoDictionary.removeObject(forKey: "UIRequiredDeviceCapabilities")
+			var families = (infoDictionary["UIDeviceFamily"] as? [Int]) ?? []
+			for family in [1, 2] where !families.contains(family) {
+				families.append(family)
+			}
+			infoDictionary.setObject(families, forKey: "UIDeviceFamily" as NSCopying)
+		}
+		
+		// RaDown: Fix White Icon
+		if options.fixWhiteIcon {
+			_fixPrimaryIcon(in: infoDictionary, app: app)
+		}
+		
 		// MARK: Prominant values
 		
 		if let customIdentifier = options.appIdentifier {
@@ -228,6 +243,29 @@ extension SigningHandler {
 		}
 		
 		try infoDictionary.write(to: app.appendingPathComponent("Info.plist"))
+	}
+	
+	/// Lists every icon image in the app root as the primary icon, so the
+	/// home screen finds an icon even when the asset catalog lookup fails.
+	private func _fixPrimaryIcon(in infoDictionary: NSMutableDictionary, app: URL) {
+		guard let files = try? _fileManager.contentsOfDirectory(atPath: app.path) else { return }
+		
+		var names = Set<String>()
+		for file in files where file.lowercased().hasSuffix(".png") && file.lowercased().contains("icon") {
+			var base = (file as NSString).deletingPathExtension
+			if let range = base.range(of: "@") { base = String(base[..<range.lowerBound]) }
+			if let range = base.range(of: "~") { base = String(base[..<range.lowerBound]) }
+			if !base.isEmpty { names.insert(base) }
+		}
+		guard !names.isEmpty else { return }
+		
+		for key in ["CFBundleIcons", "CFBundleIcons~ipad"] {
+			var icons = (infoDictionary[key] as? [String: Any]) ?? [:]
+			var primary = (icons["CFBundlePrimaryIcon"] as? [String: Any]) ?? [:]
+			primary["CFBundleIconFiles"] = names.sorted()
+			icons["CFBundlePrimaryIcon"] = primary
+			infoDictionary[key] = icons
+		}
 	}
 	
 	private func _modifyDict(using infoDictionary: NSMutableDictionary, for image: UIImage, to app: URL) async throws {

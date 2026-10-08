@@ -113,6 +113,20 @@ struct SigningOptionsView: View {
 				isOn: $options.ipadFullscreen,
 				temporaryValue: temporaryOptions?.ipadFullscreen
 			)
+			
+			_toggle(
+				.localized("Remove Device Limitations"),
+				systemImage: "ipad.and.iphone",
+				isOn: $options.removeDeviceLimitations,
+				temporaryValue: temporaryOptions?.removeDeviceLimitations
+			)
+			
+			_toggle(
+				.localized("Fix White Icon"),
+				systemImage: "app.dashed",
+				isOn: $options.fixWhiteIcon,
+				temporaryValue: temporaryOptions?.fixWhiteIcon
+			)
 		}
 		
 		NBSection(.localized("Removal")) {
