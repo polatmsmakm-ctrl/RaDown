@@ -25,8 +25,29 @@ jobs:
           fi
           xcodebuild -version
 
+      # Xcode sometimes crashes while resolving this many Swift packages
+      # (NSInvalidArgumentException in IDESwiftPackageCore), so resolve
+      # first and retry both steps a few times.
+      - name: Resolve Swift packages
+        run: |
+          DD="${TMPDIR%/}/Feather/iphoneos"
+          for i in 1 2 3 4; do
+            if xcodebuild -resolvePackageDependencies -project Feather.xcodeproj \
+                 -scheme Feather -derivedDataPath "$DD" -skipPackagePluginValidation; then
+              exit 0
+            fi
+            echo "::warning::Package resolution crashed (attempt $i), retrying"
+            sleep 5
+          done
+          exit 1
+
       - name: Build (unsigned)
-        run: make iphoneos
+        run: |
+          for i in 1 2 3; do
+            if make iphoneos; then exit 0; fi
+            echo "::warning::Build attempt $i failed, retrying"
+          done
+          exit 1
 
       - name: Package RaDown.ipa
         run: mv packages/Feather.ipa RaDown.ipa
