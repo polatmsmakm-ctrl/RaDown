@@ -1,3 +1,12 @@
+# RaDown
+
+RaDown is a personal fork of [Feather](https://github.com/claration/Feather) by Samara (claration), renamed for personal use: an on-device app for signing and installing IPAs with your own certificate. All credit for the app goes to the Feather project; like Feather, RaDown is licensed under GPL-3.0 (see [LICENSE](../LICENSE)).
+
+- **Build:** the `Build RaDown` workflow publishes an unsigned `RaDown.ipa` as the `radown-latest` release.
+- **Sign:** sign that release with your certificate using the `Sign IPA` workflow in your private repo.
+
+---
+
 [![GitHub Release](https://img.shields.io/github/v/release/claration/Feather?include_prereleases)](https://github.com/claration/Feather/releases)
 [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/claration/Feather/total)](https://github.com/claration/Feather/releases)
 [![GitHub License](https://img.shields.io/github/license/claration/Feather?color=%23C96FAD)](https://github.com/claration/Feather/blob/main/LICENSE)

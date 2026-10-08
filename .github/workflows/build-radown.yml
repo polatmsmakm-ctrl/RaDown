@@ -1,0 +1,47 @@
+name: Build RaDown
+
+# Builds an unsigned RaDown.ipa and publishes it as the "radown-latest"
+# release. Sign it with the "Sign IPA" workflow in your private Lumen repo.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Select Xcode
+        run: |
+          if [ -d /Applications/Xcode_26.3.0.app ]; then
+            sudo xcode-select -s /Applications/Xcode_26.3.0.app
+          fi
+          xcodebuild -version
+
+      - name: Build (unsigned)
+        run: make iphoneos
+
+      - name: Package RaDown.ipa
+        run: mv packages/Feather.ipa RaDown.ipa
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RaDown-unsigned-ipa
+          path: RaDown.ipa
+
+      - name: Publish as the radown-latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete radown-latest --cleanup-tag --yes 2>/dev/null || true
+          gh release create radown-latest RaDown.ipa \
+            --title "RaDown (latest build)" \
+            --notes "Unsigned build of ${{ github.sha }}. Sign it with the Sign IPA workflow in your private repo." \
+            --latest
