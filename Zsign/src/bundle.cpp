@@ -443,7 +443,12 @@ bool ZBundle::SignNode(jvalue& jvNode)
 			m_pSignAsset = pMatch;
 		}
 
-		if (m_bRemoveProvision && NULL != m_pSignAsset && !m_pSignAsset->m_strProvData.empty()) {
+		// Only apps and app extensions carry a profile; frameworks must not.
+		bool bTakesProfile = ("/" == strFolder) ||
+			ZFile::IsPathSuffix(strFolder, ".appex") ||
+			ZFile::IsPathSuffix(strFolder, ".app");
+
+		if (bTakesProfile && m_bRemoveProvision && NULL != m_pSignAsset && !m_pSignAsset->m_strProvData.empty()) {
 			if (!ZFile::WriteFileV(m_pSignAsset->m_strProvData, "%s/%s/embedded.mobileprovision", m_strAppFolder.c_str(), strFolder.c_str())) {
 				ZLog::ErrorV(">>> Can't write embedded.mobileprovision!\n");
 				return false;
