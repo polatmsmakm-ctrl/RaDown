@@ -123,6 +123,10 @@ struct Options: Codable, Equatable {
 	var removeDeviceLimitations: Bool
 	/// RaDown: point the primary icon at the icon images inside the app, fixing blank/white icons
 	var fixWhiteIcon: Bool
+	/// RaDown: keep app extensions (widgets, share, keyboards). Off removes them.
+	var keepExtensions: Bool
+	/// RaDown: tell the app and its extensions which App Groups the profile grants (ALTAppGroups)
+	var shareAppGroups: Bool
 
 	// MARK: Experiments
 	
@@ -172,6 +176,8 @@ struct Options: Codable, Equatable {
 		mergeEntitlements: false,
 		removeDeviceLimitations: true,
 		fixWhiteIcon: false,
+		keepExtensions: true,
+		shareAppGroups: true,
 		
 		// MARK: Experiments
 		

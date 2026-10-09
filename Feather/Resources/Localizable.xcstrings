@@ -18846,6 +18846,74 @@
           }
         }
       }
+    },
+    "Extensions & Widgets" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإضافات والودجتس"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extensions & Widgets"
+          }
+        }
+      }
+    },
+    "Keep Extensions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إبقاء الإضافات"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep Extensions"
+          }
+        }
+      }
+    },
+    "Share Data with Widgets" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مشاركة البيانات مع الودجتس"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Data with Widgets"
+          }
+        }
+      }
+    },
+    "Keeps widgets, share and keyboard extensions in the app. Sharing data lets widgets read the app's data through your certificate's App Groups. Turn extensions off if an app refuses to install." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يخلي الودجتس وإضافات المشاركة والكيبورد داخل التطبيق. مشاركة البيانات تخلي الودجت يقرا بيانات التطبيق عن طريق App Groups في شهادتك. إذا رفض تطبيق يتثبت، قفّل الإضافات."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keeps widgets, share and keyboard extensions in the app. Sharing data lets widgets read the app's data through your certificate's App Groups. Turn extensions off if an app refuses to install."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
