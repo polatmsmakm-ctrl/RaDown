@@ -116,7 +116,6 @@ final class SigningHandler: NSObject {
 			appCertificate != nil
 		{
 			try await handler.sign()
-			_embedProvisionWhereMissing(in: movedAppPath)
 //		} else if _options.signingOption == .adhoc {
 //			try await handler.adhocSign()
 		} else if _options.signingOption == .onlyModify {
@@ -469,29 +468,6 @@ extension SigningHandler {
 			return nil
 		}
 		return plist["Entitlements"] as? [String: Any]
-	}
-	
-	/// zsign leaves embedded.mobileprovision out of the code seal and writes it
-	/// back only into bundles whose identifier matches the profile's App ID.
-	/// With a single-App-ID profile and apps keeping their own identifiers,
-	/// that leaves the app and its extensions without a profile, so iOS
-	/// refuses them. Writing it afterwards keeps the seal valid.
-	private func _embedProvisionWhereMissing(in app: URL) {
-		guard
-			!_options.removeProvisioning,
-			let cert = appCertificate,
-			let provision = Storage.shared.getFile(.provision, from: cert),
-			let data = try? Data(contentsOf: provision)
-		else {
-			return
-		}
-		
-		for bundle in [app] + _nestedBundles(in: app) {
-			let target = bundle.appendingPathComponent("embedded.mobileprovision")
-			if !_fileManager.fileExists(atPath: target.path) {
-				try? data.write(to: target)
-			}
-		}
 	}
 	
 	// horrible edge-case
