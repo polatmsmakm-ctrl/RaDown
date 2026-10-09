@@ -87,7 +87,6 @@ final class SigningHandler: NSObject {
 		
 		try await _removePresetFiles(for: movedAppPath)
 		try await _removeWatchIfNeeded(for: movedAppPath)
-		try await _applyExtensionOptions(for: movedAppPath)
 		
 		if _options.experiment_supportLiquidGlass {
 			try await _locateMachosAndChangeToSDK26(for: movedAppPath)
@@ -406,68 +405,6 @@ extension SigningHandler {
 		for file in files {
 			try _fileManager.removeFileIfNeeded(at: file)
 		}
-	}
-	
-	// MARK: RaDown: extensions and widgets
-	
-	/// Bundles nested inside the app that iOS installs with it: extensions
-	/// (PlugIns, Extensions) and Watch apps.
-	private func _nestedBundles(in app: URL) -> [URL] {
-		_enumerateFiles(at: app) { $0.hasSuffix(".appex") || $0.hasSuffix(".app") }
-			.filter { $0.standardizedFileURL != app.standardizedFileURL }
-	}
-	
-	private func _applyExtensionOptions(for app: URL) async throws {
-		guard _options.keepExtensions else {
-			for folder in ["PlugIns", "Extensions", "Watch"] {
-				try _fileManager.removeFileIfNeeded(at: app.appendingPathComponent(folder))
-			}
-			return
-		}
-		
-		guard
-			_options.shareAppGroups,
-			let groups = _provisionedAppGroups(), !groups.isEmpty
-		else {
-			return
-		}
-		
-		// Apps written for AltStore read ALTAppGroups to find the shared
-		// container their widgets also use.
-		for bundle in [app] + _nestedBundles(in: app) {
-			let infoURL = bundle.appendingPathComponent("Info.plist")
-			guard let info = NSMutableDictionary(contentsOf: infoURL) else { continue }
-			info["ALTAppGroups"] = groups
-			info.write(to: infoURL, atomically: true)
-		}
-	}
-	
-	/// App Group identifiers granted by the selected certificate's profile.
-	private func _provisionedAppGroups() -> [String]? {
-		guard
-			let cert = appCertificate,
-			let url = Storage.shared.getFile(.provision, from: cert),
-			let entitlements = _profileEntitlements(at: url)
-		else {
-			return nil
-		}
-		return (entitlements["com.apple.security.application-groups"] as? [String])?
-			.filter { !$0.contains("*") }
-	}
-	
-	private func _profileEntitlements(at url: URL) -> [String: Any]? {
-		guard
-			let data = try? Data(contentsOf: url),
-			let start = data.range(of: Data("<?xml".utf8)),
-			let end = data.range(of: Data("</plist>".utf8), in: start.lowerBound..<data.endIndex),
-			let plist = try? PropertyListSerialization.propertyList(
-				from: data.subdata(in: start.lowerBound..<end.upperBound),
-				format: nil
-			) as? [String: Any]
-		else {
-			return nil
-		}
-		return plist["Entitlements"] as? [String: Any]
 	}
 	
 	// horrible edge-case

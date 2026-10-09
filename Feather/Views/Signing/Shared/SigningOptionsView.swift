@@ -129,25 +129,6 @@ struct SigningOptionsView: View {
 			)
 		}
 		
-		NBSection(.localized("Extensions & Widgets")) {
-			_toggle(
-				.localized("Keep Extensions"),
-				systemImage: "puzzlepiece.extension",
-				isOn: $options.keepExtensions,
-				temporaryValue: temporaryOptions?.keepExtensions
-			)
-			
-			_toggle(
-				.localized("Share Data with Widgets"),
-				systemImage: "square.on.square.dashed",
-				isOn: $options.shareAppGroups,
-				temporaryValue: temporaryOptions?.shareAppGroups
-			)
-			.disabled(!options.keepExtensions)
-		} footer: {
-			Text(.localized("Keeps widgets, share and keyboard extensions in the app. Sharing data lets widgets read the app's data through your certificate's App Groups. Turn extensions off if an app refuses to install."))
-		}
-		
 		NBSection(.localized("Removal")) {
 			_toggle(
 				.localized("Remove URL Scheme"),
