@@ -35,17 +35,10 @@ struct SettingsView: View {
 	}
 
     
-	private let _donationsUrl = "https://github.com/sponsors/claration"
-	private let _githubUrl = "https://github.com/claration/Feather"
-    
 	// MARK: Body
 	var body: some View {
 		NBNavigationView(.localized("Settings")) {
 			Form {
-				#if !NIGHTLY && !DEBUG
-					SettingsDonationCellView(site: _donationsUrl)
-				#endif
-                
 				_feedback()
                 
 				Section {
@@ -114,15 +107,6 @@ extension SettingsView {
 					FRAppIconView(size: 23)
 				}
 			}
-            
-			Button(.localized("Submit Feedback"), systemImage: "safari") {
-				UIApplication.open(URL(string: "\(_githubUrl)/issues/new/choose")!)
-			}
-			Button(.localized("GitHub Repository"), systemImage: "safari") {
-				UIApplication.open(_githubUrl)
-			}
-		} footer: {
-			Text(.localized("If any issues occur within the app please report it via the GitHub repository. When submitting an issue, make sure to submit detailed information."))
 		}
 	}
     
