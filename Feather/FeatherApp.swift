@@ -24,8 +24,13 @@ struct FeatherApp: App {
 		// later from iOS Settings → RaDown → Language.
 		let key = "RaDown.didApplyDefaultLanguage"
 		if !UserDefaults.standard.bool(forKey: key) {
-			UserDefaults.standard.set(["ar"], forKey: "AppleLanguages")
 			UserDefaults.standard.set(true, forKey: key)
+
+			// The device's own languages stay behind Arabic, so anything without
+			// an Arabic translation reads in a language the person knows instead
+			// of falling straight back to English.
+			let fallbacks = Locale.preferredLanguages.filter { !$0.hasPrefix("ar") }
+			UserDefaults.standard.set(["ar"] + fallbacks, forKey: "AppleLanguages")
 		}
 	}
 	

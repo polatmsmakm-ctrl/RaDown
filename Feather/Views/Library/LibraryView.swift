@@ -292,7 +292,7 @@ extension LibraryView {
 	private func _resignAll() {
 		let apps: [Imported] = Array(_importedApps)
 		guard !apps.isEmpty else { return }
-		
+
 		let index = UserDefaults.standard.integer(forKey: "feather.selectedCert")
 		guard _certificates.indices.contains(index) else {
 			UIAlertController.showAlertWithOk(
@@ -301,10 +301,23 @@ extension LibraryView {
 			)
 			return
 		}
-		
-		_signNext(apps, at: 0, certificate: _certificates[index], failed: [])
+
+		let certificate = _certificates[index]
+
+		let start = UIAlertAction(title: .localized("Re-sign All"), style: .default) { _ in
+			_signNext(apps, at: 0, certificate: certificate, failed: [])
+		}
+
+		UIAlertController.showAlertWithCancel(
+			title: .localized("Re-sign All"),
+			message: String.localized(
+				"%lld apps will be signed again with the selected certificate. The signed copy each app had before is replaced.",
+				arguments: apps.count
+			),
+			actions: [start]
+		)
 	}
-	
+
 	private func _signNext(_ apps: [Imported], at index: Int, certificate: CertificatePair, failed: [String]) {
 		guard index < apps.count else {
 			_resignProgress = nil
@@ -315,19 +328,34 @@ extension LibraryView {
 			UIAlertController.showAlertWithOk(title: .localized("Re-sign All"), message: message)
 			return
 		}
-		
+
 		let app = apps[index]
+		let options = RaDownAppPresets.options(for: app.identifier)
+
+		// The signed copies this app already has, matched by the identifier the
+		// new copy will carry, so re-signing replaces them instead of leaving a
+		// new copy in the library every time. A duplicate keeps its own
+		// identifier, so it is left alone.
+		var previous: [Signed] = []
+		if let identifier = options.appIdentifier ?? app.identifier {
+			previous = _signedApps.filter { $0.identifier == identifier }
+		}
+
 		_resignProgress = String.localized("Signing %lld of %lld", arguments: index + 1, apps.count)
-		
+
 		FR.signPackageFile(
 			app,
-			using: RaDownAppPresets.options(for: app.identifier),
+			using: options,
 			icon: nil,
 			certificate: certificate
 		) { error in
 			var failed = failed
 			if error != nil {
 				failed.append(app.name ?? app.identifier ?? "?")
+			} else {
+				for old in previous {
+					Storage.shared.deleteApp(for: old)
+				}
 			}
 			_signNext(apps, at: index + 1, certificate: certificate, failed: failed)
 		}

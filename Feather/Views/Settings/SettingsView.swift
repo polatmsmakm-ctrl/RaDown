@@ -169,7 +169,19 @@ extension SettingsView {
 		
 		Task.detached {
 			do {
-				try? FileManager.default.removeItem(at: zipURL)
+				// Earlier backups sit in the temporary directory until iOS gets
+				// around to clearing it, which with a few large IPAs inside is a
+				// lot of storage for files already saved elsewhere.
+				let temporary = FileManager.default.temporaryDirectory
+				let leftovers = (try? FileManager.default.contentsOfDirectory(
+					at: temporary,
+					includingPropertiesForKeys: nil
+				)) ?? []
+
+				for leftover in leftovers where leftover.lastPathComponent.hasPrefix("RaDown-Backup-") {
+					try? FileManager.default.removeItem(at: leftover)
+				}
+
 				try await Zip.zipFiles(
 					paths: paths,
 					zipFilePath: zipURL,

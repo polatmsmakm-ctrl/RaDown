@@ -245,17 +245,31 @@ extension SigningHandler {
 		try infoDictionary.write(to: app.appendingPathComponent("Info.plist"))
 	}
 	
-	/// Lists every icon image in the app root as the primary icon, so the
-	/// home screen finds an icon even when the asset catalog lookup fails.
+	/// Lists the app's own icon images as the primary icon, so the home screen
+	/// finds an icon even when the asset catalog lookup fails.
+	///
+	/// Only square images of at least 60 points whose name begins like an app
+	/// icon count: taking every file with "icon" in its name picked up artwork
+	/// such as `tab_icon.png` and left the wrong picture on the home screen.
 	private func _fixPrimaryIcon(in infoDictionary: NSMutableDictionary, app: URL) {
 		guard let files = try? _fileManager.contentsOfDirectory(atPath: app.path) else { return }
-		
+
 		var names = Set<String>()
-		for file in files where file.lowercased().hasSuffix(".png") && file.lowercased().contains("icon") {
+		for file in files where file.lowercased().hasSuffix(".png") {
 			var base = (file as NSString).deletingPathExtension
 			if let range = base.range(of: "@") { base = String(base[..<range.lowerBound]) }
 			if let range = base.range(of: "~") { base = String(base[..<range.lowerBound]) }
-			if !base.isEmpty { names.insert(base) }
+
+			let name = base.lowercased()
+			guard
+				!base.isEmpty,
+				name.hasPrefix("icon") || name.hasPrefix("appicon"),
+				_isIconImage(at: app.appendingPathComponent(file))
+			else {
+				continue
+			}
+
+			names.insert(base)
 		}
 		guard !names.isEmpty else { return }
 		
@@ -266,6 +280,15 @@ extension SigningHandler {
 			icons["CFBundlePrimaryIcon"] = primary
 			infoDictionary[key] = icons
 		}
+	}
+
+	/// A square image big enough to be an app icon.
+	private func _isIconImage(at url: URL) -> Bool {
+		guard let image = UIImage(contentsOfFile: url.path) else { return false }
+
+		let width = image.size.width * image.scale
+		let height = image.size.height * image.scale
+		return width == height && width >= 60
 	}
 	
 	private func _modifyDict(using infoDictionary: NSMutableDictionary, for image: UIImage, to app: URL) async throws {
