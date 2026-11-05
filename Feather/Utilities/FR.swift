@@ -132,6 +132,21 @@ enum FR {
 		HeartbeatManager.shared.start(true)
 	}
 	
+	/// RaDown: the Fully Local server needs these files to serve HTTPS, and
+	/// without them an install has nothing to hand iOS. They used to be
+	/// downloaded only by tapping a button in Settings, so a fresh install
+	/// could never install anything.
+	static let sslCertificatePackUrl = "https://backloop.dev/pack.json"
+
+	static func ensureSSLCertificates(completion: @escaping (Bool) -> Void = { _ in }) {
+		guard !ServerInstaller.hasSSLCertificates else {
+			completion(true)
+			return
+		}
+
+		downloadSSLCertificates(from: sslCertificatePackUrl, completion: completion)
+	}
+
 	static func downloadSSLCertificates(
 		from urlString: String,
 		completion: @escaping (Bool) -> Void

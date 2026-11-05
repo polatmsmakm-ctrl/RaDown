@@ -84,10 +84,8 @@ struct LibraryView: View {
 					!_filteredSignedApps.isEmpty,
 					_selectedScope == .all || _selectedScope == .signed
 				{
-					NBSection(
-						.localized("Signed"),
-						secondary: _filteredSignedApps.count.description
-					) {
+					// RaDown: no header above the signed apps
+					Section {
 						ForEach(_filteredSignedApps, id: \.uuid) { app in
 							LibraryCellView(
 								app: app,
@@ -105,10 +103,8 @@ struct LibraryView: View {
 					!_filteredImportedApps.isEmpty,
 					_selectedScope == .all || _selectedScope == .imported
 				{
-					NBSection(
-						.localized("Imported"),
-						secondary: _filteredImportedApps.count.description
-					) {
+					// RaDown: no header above the imported apps either
+					Section {
 						ForEach(_filteredImportedApps, id: \.uuid) { app in
 							LibraryCellView(
 								app: app,

@@ -16,8 +16,8 @@ struct InstallPreviewView: View {
 
 	@AppStorage("Feather.useShareSheetForArchiving") private var _useShareSheet: Bool = false
 	@AppStorage("Feather.installationMethod") private var _installationMethod: Int = 0
-	@AppStorage("Feather.serverMethod") private var _serverMethod: Int = 1
 	@State private var _isWebviewPresenting = false
+	@State private var _canInstall = false
 	@State private var progressTask: Task<Void, Never>?
 	
 	var app: AppInfoPresentable
@@ -59,17 +59,18 @@ struct InstallPreviewView: View {
 		.onReceive(viewModel.$status) { newStatus in
 			if _installationMethod == 0 {
 				if case .ready = newStatus {
-					if _serverMethod == 0 {
-						UIApplication.shared.open(URL(string: installer.iTunesLink)!)
-					} else if _serverMethod == 1 {
-						_isWebviewPresenting = true
+					_canInstall = true
+					_openInstallLink()
+				}
+
+				if case .sendingPayload = newStatus {
+					_canInstall = false
+
+					if installer.getServerMethod() == 1 {
+						_isWebviewPresenting = false
 					}
 				}
-				
-				if case .sendingPayload = newStatus, _serverMethod == 1 {
-					_isWebviewPresenting = false
-				}
-				
+
 				if case .installing = newStatus {
 					if progressTask == nil {
 						progressTask = startInstallProgressPolling(
@@ -129,13 +130,51 @@ struct InstallPreviewView: View {
 				}
 				.padding()
 				.compatTransition()
+			} else if _canInstall {
+				// RaDown: the install link is opened on its own as soon as the
+				// package is ready, but iOS quietly ignores that often enough
+				// that there has to be something left to tap.
+				Button {
+					_openInstallLink()
+				} label: {
+					NBButton(.localized("Install"), systemImage: "", style: .text)
+				}
+				.padding()
+				.compatTransition()
 			}
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
 		.animation(.easeInOut(duration: 0.3), value: viewModel.isCompleted)
+		.animation(.easeInOut(duration: 0.3), value: _canInstall)
+	}
+
+	/// Hands the package to iOS: Fully Local opens the itms-services link at
+	/// the device's own HTTPS server, Semi Local opens the page that redirects
+	/// to it.
+	private func _openInstallLink() {
+		if installer.getServerMethod() == 1 {
+			_isWebviewPresenting = true
+			return
+		}
+
+		guard let url = URL(string: installer.iTunesLink) else { return }
+		UIApplication.shared.open(url)
 	}
 	
 	private func _install() {
+		// RaDown: the server starting is what produces the install link, so if
+		// it did not start, say so now rather than leaving the screen waiting.
+		if !isSharing, _installationMethod == 0, let startupError = installer.startupError {
+			FR.ensureSSLCertificates()
+
+			UIAlertController.showAlertWithOk(
+				title: .localized("Install"),
+				message: startupError,
+				action: { dismiss() }
+			)
+			return
+		}
+
 		guard isSharing || app.identifier != Bundle.main.bundleIdentifier! || _installationMethod == 1 else {
 			UIAlertController.showAlertWithOk(
 				title: .localized("Install"),

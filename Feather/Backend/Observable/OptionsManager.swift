@@ -181,7 +181,9 @@ struct Options: Codable, Equatable {
 		
 		// MARK: Post Modifications
 		
-		post_installAppAfterSigned: false,
+		// RaDown: offer to install straight after signing, which is what
+		// signing is for; it can be turned off in the signing options.
+		post_installAppAfterSigned: true,
 		post_deleteAppAfterSigned: false
 	)
 	

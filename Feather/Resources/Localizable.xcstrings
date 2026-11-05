@@ -19152,6 +19152,23 @@
           }
         }
       }
+    },
+    "The local server could not start. Open Settings → Installation → Server & SSL, tap Update SSL Certificates, then try again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما قدر السيرفر المحلي يبدأ. افتح الإعدادات ← التثبيت ← Server & SSL، واضغط “تحديث شهادات SSL”، وبعدها جرّب مرة ثانية."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The local server could not start. Open Settings → Installation → Server & SSL, tap Update SSL Certificates, then try again."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

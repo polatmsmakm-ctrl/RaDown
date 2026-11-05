@@ -25,6 +25,10 @@ class ServerInstaller: Identifiable, ObservableObject {
 	@ObservedObject var viewModel: InstallerStatusViewModel
 	private var _server: Application?
 
+	/// RaDown: set when the local server could not be started, so the install
+	/// screen can say so instead of waiting for a link that never arrives.
+	var startupError: String?
+
 	init(app: AppInfoPresentable, viewModel: InstallerStatusViewModel) throws {
 		self.app = app
 		self.viewModel = viewModel
@@ -40,6 +44,10 @@ class ServerInstaller: Identifiable, ObservableObject {
 	
 	private func _setup() throws {
 		self._server = try? setupApp(port: port)
+
+		if _server == nil {
+			startupError = String.localized("The local server could not start. Open Settings → Installation → Server & SSL, tap Update SSL Certificates, then try again.")
+		}
 	}
 		
 	private func _configureRoutes() throws {
@@ -102,9 +110,14 @@ class ServerInstaller: Identifiable, ObservableObject {
 	}
 		
 	func getServerMethod() -> Int {
-		// RaDown: default to Semi Local (1). Fully Local opens itms-services
-		// from the app, which recent iOS blocks without extra entitlements.
-		UserDefaults.standard.object(forKey: "Feather.serverMethod") as? Int ?? 1
+		// RaDown: Fully Local (0) serves the manifest and the app itself over
+		// HTTPS from the device, which is what iOS needs and does not depend on
+		// any outside service. It only works once the SSL files are there, so
+		// until then this falls back to Semi Local (1).
+		if let chosen = UserDefaults.standard.object(forKey: "Feather.serverMethod") as? Int {
+			return chosen
+		}
+		return Self.defaultServerMethod
 	}
 	
 	func getIPFix() -> Bool {

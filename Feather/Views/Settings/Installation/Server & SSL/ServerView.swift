@@ -49,11 +49,11 @@ extension ServerView {
 // MARK: - View
 struct ServerView: View {
 	@AppStorage("Feather.ipFix") private var _ipFix: Bool = false
-	@AppStorage("Feather.serverMethod") private var _serverMethod: Int = 1
+	@AppStorage("Feather.serverMethod") private var _serverMethod: Int = ServerInstaller.defaultServerMethod
 	private let _serverMethods: [String] = [.localized("Fully Local"), .localized("Semi Local")]
-	
+
 	private let _dataService = NBFetchService()
-	private let _serverPackUrl = "https://backloop.dev/pack.json"
+	private let _serverPackUrl = FR.sslCertificatePackUrl
 	
 	// MARK: Body
 	var body: some View {

@@ -32,6 +32,11 @@ struct FeatherApp: App {
 			let fallbacks = Locale.preferredLanguages.filter { !$0.hasPrefix("ar") }
 			UserDefaults.standard.set(["ar"] + fallbacks, forKey: "AppleLanguages")
 		}
+
+		// RaDown: the files the local HTTPS server installs through, fetched
+		// once in the background so the first install works without anyone
+		// having to find the button for it in Settings.
+		FR.ensureSSLCertificates()
 	}
 	
 	var body: some Scene {

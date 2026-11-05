@@ -73,6 +73,20 @@ extension ServerInstaller {
 		)
 	}
 	
+	/// RaDown: whether the SSL files the Fully Local server needs are in place.
+	/// Without them the server falls back to plain HTTP, which iOS refuses to
+	/// install from, and the install used to sit on "Ready" forever.
+	static var hasSSLCertificates: Bool {
+		getUrl("server", ext: "crt") != nil
+			&& getUrl("server", ext: "pem") != nil
+			&& getUrl("commonName", ext: "txt") != nil
+	}
+
+	/// Fully Local once the certificates are there, Semi Local until then.
+	static var defaultServerMethod: Int {
+		hasSSLCertificates ? 0 : 1
+	}
+
 	func readCommonName() -> String? {
 		guard let url = Self.getUrl("commonName", ext: "txt") else {
 			return nil
