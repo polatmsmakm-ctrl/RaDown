@@ -57,9 +57,18 @@ struct TunnelView: View {
 			}
 			
 			NBSection(.localized("Help")) {
-				Button(.localized("Pairing File Guide"), systemImage: "questionmark.circle") {
-					UIApplication.open("https://github.com/claration/Impactor#pairing-file")
+				// RaDown: the steps in full, rather than a link to a page
+				// elsewhere, since this is the one thing that needs a computer.
+				VStack(alignment: .leading, spacing: 8) {
+					Text(.localized("How to get a pairing file"))
+						.font(.headline)
+
+					Text(.localized("1. On your computer, install iTunes (Windows) so it can see the iPhone.\n2. Download JitterbugPair and run it with the iPhone plugged in and unlocked, tapping Trust if asked.\n3. It makes a file ending in .mobiledevicepairing.\n4. Send that file to the iPhone and import it above.\n\nOnce it is imported, installing needs no server, no certificate and no internet."))
+						.font(.subheadline)
+						.foregroundStyle(.secondary)
 				}
+				.padding(.vertical, 4)
+
 				if isLocalDevVpnAvailable {
 					Button(.localized("Connect to LocalDevVPN"), systemImage: "link") {
 						UIApplication.open("localdevvpn://enable?scheme=feather")

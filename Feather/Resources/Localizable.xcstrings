@@ -19424,6 +19424,159 @@
           }
         }
       }
+    },
+    "Certificate expiring" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الشهادة قربت تنتهي"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certificate expiring"
+          }
+        }
+      }
+    },
+    "‘%@‘ expires in two days. Sign your apps again before then, or they will stop opening." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‘%@‘ تنتهي بعد يومين. أعد توقيع تطبيقاتك قبل ذلك، وإلا بتوقف عن الفتح."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‘%@‘ expires in two days. Sign your apps again before then, or they will stop opening."
+          }
+        }
+      }
+    },
+    "‘%@‘ expires today. Sign your apps again now, or they will stop opening." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‘%@‘ تنتهي اليوم. أعد توقيع تطبيقاتك الحين، وإلا بتوقف عن الفتح."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‘%@‘ expires today. Sign your apps again now, or they will stop opening."
+          }
+        }
+      }
+    },
+    "Your certificate has expired" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتهت صلاحية شهادتك"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your certificate has expired"
+          }
+        }
+      }
+    },
+    "Your certificate expires in %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شهادتك تنتهي خلال %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your certificate expires in %@"
+          }
+        }
+      }
+    },
+    "Apps signed with it will not open until they are signed again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التطبيقات الموقّعة فيها ما راح تفتح إلا بعد إعادة توقيعها."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apps signed with it will not open until they are signed again."
+          }
+        }
+      }
+    },
+    "Sign your apps again before then, or they will stop opening." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أعد توقيع تطبيقاتك قبل ذلك، وإلا بتوقف عن الفتح."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign your apps again before then, or they will stop opening."
+          }
+        }
+      }
+    },
+    "How to get a pairing file" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "كيف تحصل على ملف الاقتران"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How to get a pairing file"
+          }
+        }
+      }
+    },
+    "1. On your computer, install iTunes (Windows) so it can see the iPhone.\n2. Download JitterbugPair and run it with the iPhone plugged in and unlocked, tapping Trust if asked.\n3. It makes a file ending in .mobiledevicepairing.\n4. Send that file to the iPhone and import it above.\n\nOnce it is imported, installing needs no server, no certificate and no internet." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "١. على الكمبيوتر، ثبّت iTunes (ويندوز) عشان يتعرّف على الآيفون.\n٢. نزّل JitterbugPair وشغّله والآيفون موصول ومفتوح، واضغط «وثوق» إذا طلب.\n٣. بيطلع ملف ينتهي بـ .mobiledevicepairing.\n٤. أرسل الملف للآيفون واستورده من فوق.\n\nبعد استيراده، التثبيت ما يحتاج سيرفر ولا شهادة ولا إنترنت."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1. On your computer, install iTunes (Windows) so it can see the iPhone.\n2. Download JitterbugPair and run it with the iPhone plugged in and unlocked, tapping Trust if asked.\n3. It makes a file ending in .mobiledevicepairing.\n4. Send that file to the iPhone and import it above.\n\nOnce it is imported, installing needs no server, no certificate and no internet."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

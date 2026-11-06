@@ -80,6 +80,8 @@ struct LibraryView: View {
 	var body: some View {
 		NBNavigationView(.localized("Library")) {
 			NBListAdaptable {
+				_certificateWarning()
+
 				if
 					!_filteredSignedApps.isEmpty,
 					_selectedScope == .all || _selectedScope == .signed
@@ -125,6 +127,11 @@ struct LibraryView: View {
 				}
 			}
 			.scrollDismissesKeyboard(.interactively)
+			// RaDown: keep the expiry notices pointed at the certificate in use.
+			.onAppear(perform: _rescheduleExpiryNotices)
+			.onChange(of: _certificates.count) { _ in
+				_rescheduleExpiryNotices()
+			}
 			.overlay(alignment: .bottom) {
 				if let progress = _resignProgress {
 					HStack(spacing: 10) {
@@ -283,6 +290,64 @@ extension LibraryView {
 
 // MARK: - Extension: Re-sign All (RaDown)
 extension LibraryView {
+	private func _rescheduleExpiryNotices() {
+		let certificate = _selectedCertificate
+
+		CertificateExpiryNotifier.schedule(
+			for: certificate?.expiration,
+			certificateName: certificate?.nickname
+		)
+	}
+
+	/// RaDown: the certificate in use, which is the one Re-sign All signs with.
+	private var _selectedCertificate: CertificatePair? {
+		let index = UserDefaults.standard.integer(forKey: "feather.selectedCert")
+		return _certificates.indices.contains(index) ? _certificates[index] : nil
+	}
+
+	/// A free certificate lasts a week and takes every app signed with it down
+	/// when it goes, so the last days of one belong at the top of the library
+	/// rather than buried in settings.
+	@ViewBuilder
+	private func _certificateWarning() -> some View {
+		if
+			let certificate = _selectedCertificate,
+			let expiration = certificate.expiration,
+			expiration.timeIntervalSinceNow < (2 * 24 * 60 * 60)
+		{
+			let hasExpired = expiration <= Date()
+
+			Section {
+				VStack(alignment: .leading, spacing: 8) {
+					Label(
+						hasExpired
+							? .localized("Your certificate has expired")
+							: .localized("Your certificate expires in %@", arguments: expiration.expirationInfo().formatted),
+						systemImage: hasExpired ? "xmark.octagon.fill" : "clock.badge.exclamationmark"
+					)
+					.font(.headline)
+					.foregroundStyle(hasExpired ? Color.red : Color.orange)
+
+					Text(
+						hasExpired
+							? .localized("Apps signed with it will not open until they are signed again.")
+							: .localized("Sign your apps again before then, or they will stop opening.")
+					)
+					.font(.subheadline)
+					.foregroundStyle(.secondary)
+
+					if !_importedApps.isEmpty {
+						Button(.localized("Re-sign All")) {
+							_resignAll()
+						}
+						.buttonStyle(.borderedProminent)
+					}
+				}
+				.padding(.vertical, 6)
+			}
+		}
+	}
+
 	/// Signs every imported app again with the selected certificate, one after
 	/// another, each with the options last used for it.
 	private func _resignAll() {
