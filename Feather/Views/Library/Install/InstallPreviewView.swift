@@ -20,6 +20,7 @@ struct InstallPreviewView: View {
 	@State private var _canInstall = false
 	@State private var progressTask: Task<Void, Never>?
 	@State private var _watchdogTask: Task<Void, Never>?
+	@State private var _retriedViaPage = false
 	
 	var app: AppInfoPresentable
 	@StateObject var viewModel: InstallerStatusViewModel
@@ -164,20 +165,26 @@ struct InstallPreviewView: View {
 	/// the device's own HTTPS server, Semi Local opens the page that redirects
 	/// to it.
 	private func _openInstallLink() {
-		if installer.getServerMethod() == 1 {
-			_isWebviewPresenting = true
-			_startWatchdog()
-			return
-		}
+		let isSemiLocal = installer.getServerMethod() == 1
 
-		guard let url = URL(string: installer.iTunesLink) else {
-			_reportInstallDidNotStart()
+		let link = isSemiLocal
+			? installer.iTunesLinkExternalDirect
+			: installer.iTunesLink
+
+		guard let url = URL(string: link) else {
+			// The page is the long way round, but it is still a way round.
+			if isSemiLocal { _isWebviewPresenting = true } else { _reportInstallDidNotStart() }
+			_startWatchdog()
 			return
 		}
 
 		UIApplication.shared.open(url) { opened in
 			if !opened {
-				_reportInstallDidNotStart()
+				if isSemiLocal {
+					_isWebviewPresenting = true
+				} else {
+					_reportInstallDidNotStart()
+				}
 			}
 		}
 
@@ -194,19 +201,39 @@ struct InstallPreviewView: View {
 			guard !Task.isCancelled else { return }
 
 			await MainActor.run {
-				if case .ready = viewModel.status {
-					_reportInstallDidNotStart()
+				guard case .ready = viewModel.status else { return }
+
+				// iOS can ignore the link without a reason. Before giving up,
+				// try the page that redirects to it instead.
+				if installer.getServerMethod() == 1, !_retriedViaPage {
+					_retriedViaPage = true
+					_isWebviewPresenting = true
+					_startWatchdog()
+					return
 				}
+
+				_reportInstallDidNotStart()
 			}
 		}
 	}
 
 	private func _reportInstallDidNotStart() {
+		let isSemiLocal = installer.getServerMethod() == 1
+
+		let explanation: String = isSemiLocal
+			? .localized("iOS did not start the installation. Check your internet connection and try again.")
+			: .localized("iOS did not start the installation. Open Settings → Installation → Server & SSL and trust the local certificate, or pick Semi Local there.")
+
+		// The details are here so a screenshot is enough to tell what happened.
+		let details = """
+		\(isSemiLocal ? "Semi Local" : "Fully Local")
+		\(installer.payloadEndpoint.absoluteString)
+		\(isSemiLocal ? ServerInstaller.manifestServiceUrl : "—")
+		"""
+
 		UIAlertController.showAlertWithOk(
 			title: .localized("Install"),
-			message: installer.getServerMethod() == 1
-				? .localized("iOS did not start the installation. Check your internet connection and try again.")
-				: .localized("iOS did not start the installation. Open Settings → Installation → Server & SSL and trust the local certificate, or pick Semi Local there.")
+			message: explanation + "\n\n" + details
 		)
 	}
 	

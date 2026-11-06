@@ -14,6 +14,8 @@ struct ServerView: View {
 	@AppStorage("Feather.serverMethod") private var _serverMethod: Int = ServerInstaller.defaultServerMethod
 	private let _serverMethods: [String] = [.localized("Fully Local"), .localized("Semi Local")]
 
+	@AppStorage("RaDown.manifestService") private var _manifestService: String = ""
+
 	@State private var _isTrusted: Bool = ServerInstaller.localCertificateTrustIsEstablished()
 
 	// MARK: Body
@@ -29,6 +31,19 @@ struct ServerView: View {
 					.disabled(_serverMethod != 1)
 			} footer: {
 				Text(.localized("Fully Local installs straight from this device and needs its certificate trusted below. Semi Local needs no certificate."))
+			}
+
+			Section {
+				TextField(
+					ServerInstaller.defaultManifestServiceUrl,
+					text: $_manifestService
+				)
+				.textInputAutocapitalization(.never)
+				.autocorrectionDisabled()
+			} header: {
+				Text(.localized("Manifest Service"))
+			} footer: {
+				Text(.localized("Semi Local asks this address to build the install manifest, because iOS only accepts one over HTTPS. Leave it empty to use the default."))
 			}
 
 			Section {

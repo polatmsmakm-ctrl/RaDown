@@ -127,6 +127,29 @@ class ServerInstaller: Identifiable, ObservableObject {
 	}
 	
 	func getIPFix() -> Bool {
-		UserDefaults.standard.bool(forKey: "Feather.ipFix")
+		// RaDown: serve from the loopback address by default. The Wi-Fi address
+		// is reachable in principle but depends on the network behaving, and on
+		// iOS it runs into local-network restrictions; the loopback address is
+		// the device talking to itself and always works. GBox, which installs
+		// the same way, uses localhost for exactly this reason.
+		if let chosen = UserDefaults.standard.object(forKey: "Feather.ipFix") as? Bool {
+			return chosen
+		}
+		return true
 	}
+
+	/// The service that turns the local package URL into the manifest iOS asks
+	/// for. It has to be reachable over HTTPS, which is why it cannot be this
+	/// device. Configurable so a service going down is not a dead end.
+	static var manifestServiceUrl: String {
+		let stored = UserDefaults.standard.string(forKey: "RaDown.manifestService")
+
+		guard let stored, !stored.trimmingCharacters(in: .whitespaces).isEmpty else {
+			return defaultManifestServiceUrl
+		}
+
+		return stored
+	}
+
+	static let defaultManifestServiceUrl = "https://api.palera.in/genPlist"
 }

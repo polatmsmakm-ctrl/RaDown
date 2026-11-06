@@ -38,11 +38,17 @@ extension ServerInstaller {
 		return comps.url!
 	}
 	
+	/// The manifest service's address with this app's details in it.
+	var externalServiceUrl: String {
+		"\(ServerInstaller.manifestServiceUrl)?bundleid=\(app.identifier ?? "")&name=\(app.name ?? "")&version=\(app.version ?? "1.0")&fetchurl=\(self.payloadEndpoint.absoluteString)"
+	}
+
+	/// Encoded twice, because the page below hands it to the browser first and
+	/// the browser decodes it once on the way to iOS.
 	var externalServerLink: String {
-		let baseUrl = "https://api.palera.in/genPlist?bundleid=\(app.identifier!)&name=\(app.name!)&version=\(app.version!)&fetchurl=\(self.payloadEndpoint.absoluteString)"
-		let encodedBaseUrl = baseUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-		let finalEncodedUrl = encodedBaseUrl.addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
-		
+		let encodedBaseUrl = externalServiceUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? externalServiceUrl
+		let finalEncodedUrl = encodedBaseUrl.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? encodedBaseUrl
+
 		return finalEncodedUrl
 	}
 
@@ -52,6 +58,15 @@ extension ServerInstaller {
 	
 	var iTunesLinkExternal: String {
 		_iTunesLink(with: externalServerLink)
+	}
+
+	/// RaDown: encoded once, for handing straight to iOS without a browser in
+	/// between. GBox, which installs the same way, opens its link like this
+	/// rather than bouncing through a page, and one less step is one less
+	/// place for the install to disappear without a word.
+	var iTunesLinkExternalDirect: String {
+		let encoded = externalServiceUrl.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? externalServiceUrl
+		return _iTunesLink(with: encoded)
 	}
 	
 	private func _iTunesLink(with url: String) -> String {

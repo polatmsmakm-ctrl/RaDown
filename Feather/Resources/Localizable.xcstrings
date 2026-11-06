@@ -19390,6 +19390,40 @@
           }
         }
       }
+    },
+    "Manifest Service" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خدمة الـ manifest"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manifest Service"
+          }
+        }
+      }
+    },
+    "Semi Local asks this address to build the install manifest, because iOS only accepts one over HTTPS. Leave it empty to use the default." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وضع Semi Local يطلب من هذا العنوان بناء ملف التثبيت، لأن iOS ما يقبله إلا عبر HTTPS. اتركه فاضي لاستخدام الافتراضي."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semi Local asks this address to build the install manifest, because iOS only accepts one over HTTPS. Leave it empty to use the default."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
