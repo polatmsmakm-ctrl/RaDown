@@ -73,13 +73,71 @@ extension ServerInstaller {
 		)
 	}
 	
-	/// RaDown: whether the SSL files the Fully Local server needs are in place.
-	/// Without them the server falls back to plain HTTP, which iOS refuses to
-	/// install from, and the install used to sit on "Ready" forever.
+	/// RaDown: when the certificate expires iOS refuses the connection without
+	/// a word, so the install screen used to sit on "Ready" forever. The copy
+	/// shipped inside the app expires, so its date has to be checked, not just
+	/// its presence.
+	private static let _expiryLock = NSLock()
+	private static var _expiryComputed = false
+	private static var _expiry: Date?
+
+	static func sslCertificateExpiry() -> Date? {
+		_expiryLock.lock()
+		defer { _expiryLock.unlock() }
+
+		if _expiryComputed {
+			return _expiry
+		}
+
+		_expiry = _readSSLCertificateExpiry()
+		_expiryComputed = true
+		return _expiry
+	}
+
+	/// Call after writing new certificate files.
+	static func invalidateSSLCertificateCache() {
+		_expiryLock.lock()
+		_expiryComputed = false
+		_expiry = nil
+		_expiryLock.unlock()
+	}
+
+	private static func _readSSLCertificateExpiry() -> Date? {
+		guard
+			let crt = getUrl("server", ext: "crt"),
+			let chain = try? NIOSSLCertificate.fromPEMFile(crt.path),
+			let leaf = chain.first
+		else {
+			return nil
+		}
+
+		return Date(timeIntervalSince1970: TimeInterval(leaf.notValidAfter))
+	}
+
+	/// Whether the Fully Local server has a certificate iOS will accept today.
 	static var hasSSLCertificates: Bool {
-		getUrl("server", ext: "crt") != nil
-			&& getUrl("server", ext: "pem") != nil
-			&& getUrl("commonName", ext: "txt") != nil
+		guard
+			getUrl("server", ext: "pem") != nil,
+			getUrl("commonName", ext: "txt") != nil,
+			let expiry = sslCertificateExpiry()
+		else {
+			return false
+		}
+
+		return expiry > Date()
+	}
+
+	/// True while the certificate is missing, expired, or about to expire.
+	static var shouldRefreshSSLCertificates: Bool {
+		guard
+			getUrl("server", ext: "pem") != nil,
+			getUrl("commonName", ext: "txt") != nil,
+			let expiry = sslCertificateExpiry()
+		else {
+			return true
+		}
+
+		return expiry.timeIntervalSinceNow < (3 * 24 * 60 * 60)
 	}
 
 	/// Fully Local once the certificates are there, Semi Local until then.

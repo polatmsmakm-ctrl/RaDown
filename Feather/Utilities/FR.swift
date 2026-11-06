@@ -139,12 +139,16 @@ enum FR {
 	static let sslCertificatePackUrl = "https://backloop.dev/pack.json"
 
 	static func ensureSSLCertificates(completion: @escaping (Bool) -> Void = { _ in }) {
-		guard !ServerInstaller.hasSSLCertificates else {
+		// RaDown: the certificate expires, and an expired one is as useless as
+		// a missing one, so this refreshes a few days before the date passes.
+		guard ServerInstaller.shouldRefreshSSLCertificates else {
 			completion(true)
 			return
 		}
 
-		downloadSSLCertificates(from: sslCertificatePackUrl, completion: completion)
+		downloadSSLCertificates(from: sslCertificatePackUrl) { success in
+			completion(success || ServerInstaller.hasSSLCertificates)
+		}
 	}
 
 	static func downloadSSLCertificates(
@@ -161,6 +165,7 @@ enum FR {
 					try FileManager.forceWrite(content: pack.key, to: "server.pem")
 					try FileManager.forceWrite(content: pack.cert, to: "server.crt")
 					try FileManager.forceWrite(content: pack.info.domains.commonName, to: "commonName.txt")
+					ServerInstaller.invalidateSSLCertificateCache()
 					generator.notificationOccurred(.success)
 					completion(true)
 				} catch {

@@ -19169,6 +19169,23 @@
           }
         }
       }
+    },
+    "iOS did not start the installation. Open Settings → Installation → Server & SSL, tap Update SSL Certificates, then try again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما بدأ iOS التثبيت. افتح الإعدادات ← التثبيت ← Server & SSL، واضغط “تحديث شهادات SSL”، وبعدها جرّب مرة ثانية."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS did not start the installation. Open Settings → Installation → Server & SSL, tap Update SSL Certificates, then try again."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

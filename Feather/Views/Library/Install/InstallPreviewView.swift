@@ -19,6 +19,7 @@ struct InstallPreviewView: View {
 	@State private var _isWebviewPresenting = false
 	@State private var _canInstall = false
 	@State private var progressTask: Task<Void, Never>?
+	@State private var _watchdogTask: Task<Void, Never>?
 	
 	var app: AppInfoPresentable
 	@StateObject var viewModel: InstallerStatusViewModel
@@ -63,8 +64,15 @@ struct InstallPreviewView: View {
 					_openInstallLink()
 				}
 
+				if case .sendingManifest = newStatus {
+					_watchdogTask?.cancel()
+					_watchdogTask = nil
+				}
+
 				if case .sendingPayload = newStatus {
 					_canInstall = false
+					_watchdogTask?.cancel()
+					_watchdogTask = nil
 
 					if installer.getServerMethod() == 1 {
 						_isWebviewPresenting = false
@@ -84,6 +92,8 @@ struct InstallPreviewView: View {
 				case .completed, .broken(_):
 					progressTask?.cancel()
 					progressTask = nil
+					_watchdogTask?.cancel()
+					_watchdogTask = nil
 					#if !targetEnvironment(macCatalyst)
 					BackgroundAudioManager.shared.stop()
 					#endif
@@ -103,7 +113,9 @@ struct InstallPreviewView: View {
 		.onDisappear {
 			progressTask?.cancel()
 			progressTask = nil
-			
+			_watchdogTask?.cancel()
+			_watchdogTask = nil
+
 			#if !targetEnvironment(macCatalyst)
 			BackgroundAudioManager.shared.stop()
 			#endif
@@ -154,11 +166,48 @@ struct InstallPreviewView: View {
 	private func _openInstallLink() {
 		if installer.getServerMethod() == 1 {
 			_isWebviewPresenting = true
+			_startWatchdog()
 			return
 		}
 
-		guard let url = URL(string: installer.iTunesLink) else { return }
-		UIApplication.shared.open(url)
+		guard let url = URL(string: installer.iTunesLink) else {
+			_reportInstallDidNotStart()
+			return
+		}
+
+		UIApplication.shared.open(url) { opened in
+			if !opened {
+				_reportInstallDidNotStart()
+			}
+		}
+
+		_startWatchdog()
+	}
+
+	/// iOS answers an install link it does not like by doing nothing at all, so
+	/// if it never comes back for the manifest, say so rather than leaving the
+	/// screen on "Ready".
+	private func _startWatchdog() {
+		_watchdogTask?.cancel()
+		_watchdogTask = Task {
+			try? await Task.sleep(nanoseconds: 12_000_000_000)
+			guard !Task.isCancelled else { return }
+
+			await MainActor.run {
+				if case .ready = viewModel.status {
+					_reportInstallDidNotStart()
+				}
+			}
+		}
+	}
+
+	private func _reportInstallDidNotStart() {
+		FR.ensureSSLCertificates()
+
+		UIAlertController.showAlertWithOk(
+			title: .localized("Install"),
+			message: .localized("iOS did not start the installation. Open Settings → Installation → Server & SSL, tap Update SSL Certificates, then try again.")
+		)
 	}
 	
 	private func _install() {

@@ -112,8 +112,14 @@ class ServerInstaller: Identifiable, ObservableObject {
 	func getServerMethod() -> Int {
 		// RaDown: Fully Local (0) serves the manifest and the app itself over
 		// HTTPS from the device, which is what iOS needs and does not depend on
-		// any outside service. It only works once the SSL files are there, so
-		// until then this falls back to Semi Local (1).
+		// any outside service. It only works with a certificate iOS accepts, so
+		// a missing or expired one falls back to Semi Local (1) even when Fully
+		// Local was picked by hand — otherwise iOS is handed a link it refuses
+		// without reporting anything.
+		guard Self.hasSSLCertificates else {
+			return 1
+		}
+
 		if let chosen = UserDefaults.standard.object(forKey: "Feather.serverMethod") as? Int {
 			return chosen
 		}
