@@ -32,6 +32,30 @@
       ]
     },
     {
+      "_repo": "ClipStudio",
+      "_stamp": "build-4|2026-11-06T13:52:36Z",
+      "name": "ClipStudio",
+      "bundleIdentifier": "com.rashid.clipstudio",
+      "developerName": "Rashid",
+      "localizedDescription": "ClipStudio",
+      "iconURL": "https://raw.githubusercontent.com/polatmsmakm-ctrl/RaDown/main/icons/ClipStudio.png",
+      "tintColor": "848ef9",
+      "version": "1.0.0",
+      "versionDate": "2026-11-06T13:52:36Z",
+      "size": 6535851,
+      "downloadURL": "https://github.com/polatmsmakm-ctrl/ClipStudio/releases/download/build-4/ClipStudio.ipa",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2026-11-06T13:52:36Z",
+          "size": 6535851,
+          "downloadURL": "https://github.com/polatmsmakm-ctrl/ClipStudio/releases/download/build-4/ClipStudio.ipa",
+          "localizedDescription": "IPA غير موقّع — ثبّته عبر Sideloadly. Commit: 5ec5fdca4fb26c74db71d22b21a9a433b78e64dc",
+          "minOSVersion": "17.0"
+        }
+      ]
+    },
+    {
       "_repo": "Duroosi",
       "_stamp": "latest|2026-10-24T09:58:32Z",
       "name": "دروسي",
