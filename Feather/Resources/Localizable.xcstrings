@@ -19186,6 +19186,210 @@
           }
         }
       }
+    },
+    "Local Certificate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الشهادة المحلية"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local Certificate"
+          }
+        }
+      }
+    },
+    "Certificate trusted" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الشهادة موثوقة"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certificate trusted"
+          }
+        }
+      }
+    },
+    "Certificate not trusted yet" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الشهادة غير موثوقة بعد"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certificate not trusted yet"
+          }
+        }
+      }
+    },
+    "Trust Local Certificate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "توثيق الشهادة المحلية"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trust Local Certificate"
+          }
+        }
+      }
+    },
+    "Regenerate Local Certificate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إنشاء شهادة جديدة"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regenerate Local Certificate"
+          }
+        }
+      }
+    },
+    "Fully Local installs straight from this device and needs its certificate trusted below. Semi Local needs no certificate." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fully Local يثبّت من جهازك مباشرة ويحتاج توثيق الشهادة بالأسفل. Semi Local ما يحتاج شهادة."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fully Local installs straight from this device and needs its certificate trusted below. Semi Local needs no certificate."
+          }
+        }
+      }
+    },
+    "Tap Trust Local Certificate, save the file, then open it from the Files app. Install it in Settings → General → VPN & Device Management, then switch it on in Settings → General → About → Certificate Trust Settings." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اضغط “توثيق الشهادة المحلية”، واحفظ الملف، ثم افتحه من تطبيق الملفات. ثبّته من الإعدادات ← عام ← VPN وإدارة الجهاز، وبعدها فعّله من الإعدادات ← عام ← حول ← إعدادات الثقة بالشهادات."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap Trust Local Certificate, save the file, then open it from the Files app. Install it in Settings → General → VPN & Device Management, then switch it on in Settings → General → About → Certificate Trust Settings."
+          }
+        }
+      }
+    },
+    "A new certificate was made. Trust it again using the button above." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم إنشاء شهادة جديدة. وثّقها من جديد عبر الزر اللي فوق."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A new certificate was made. Trust it again using the button above."
+          }
+        }
+      }
+    },
+    "The certificate could not be made." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما قدرنا ننشئ الشهادة."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The certificate could not be made."
+          }
+        }
+      }
+    },
+    "iOS did not start the installation. Check your internet connection and try again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما بدأ iOS التثبيت. تأكد من اتصالك بالإنترنت وجرّب مرة ثانية."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS did not start the installation. Check your internet connection and try again."
+          }
+        }
+      }
+    },
+    "iOS did not start the installation. Open Settings → Installation → Server & SSL and trust the local certificate, or pick Semi Local there." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما بدأ iOS التثبيت. افتح الإعدادات ← التثبيت ← Server & SSL ووثّق الشهادة المحلية، أو اختر Semi Local من نفس الشاشة."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS did not start the installation. Open Settings → Installation → Server & SSL and trust the local certificate, or pick Semi Local there."
+          }
+        }
+      }
+    },
+    "The local server could not start. Open Settings → Installation → Server & SSL and regenerate the local certificate." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما قدر السيرفر المحلي يبدأ. افتح الإعدادات ← التثبيت ← Server & SSL وأنشئ شهادة جديدة."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The local server could not start. Open Settings → Installation → Server & SSL and regenerate the local certificate."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

@@ -132,49 +132,50 @@ enum FR {
 		HeartbeatManager.shared.start(true)
 	}
 	
-	/// RaDown: the Fully Local server needs these files to serve HTTPS, and
-	/// without them an install has nothing to hand iOS. They used to be
-	/// downloaded only by tapping a button in Settings, so a fresh install
-	/// could never install anything.
-	static let sslCertificatePackUrl = "https://backloop.dev/pack.json"
-
+	/// RaDown: the Fully Local server needs these files to serve HTTPS. They
+	/// used to come from backloop.dev, which stopped issuing certificates in
+	/// September 2026, so the app makes its own on the device instead.
 	static func ensureSSLCertificates(completion: @escaping (Bool) -> Void = { _ in }) {
-		// RaDown: the certificate expires, and an expired one is as useless as
-		// a missing one, so this refreshes a few days before the date passes.
 		guard ServerInstaller.shouldRefreshSSLCertificates else {
 			completion(true)
 			return
 		}
 
-		downloadSSLCertificates(from: sslCertificatePackUrl) { success in
-			completion(success || ServerInstaller.hasSSLCertificates)
+		completion(generateLocalSSLCertificates())
+	}
+
+	/// The certificate authority is kept once it exists, because trusting it
+	/// again is work for the person using the app. Only the server certificate
+	/// underneath it is replaced.
+	@discardableResult
+	static func generateLocalSSLCertificates() -> Bool {
+		do {
+			let material = try LocalCertificateAuthority.generate()
+
+			try FileManager.forceWrite(content: material.serverPrivateKeyPEM, to: "server.pem")
+			try FileManager.forceWrite(content: material.serverCertificatePEM, to: "server.crt")
+			try FileManager.forceWrite(content: material.commonName, to: "commonName.txt")
+			try FileManager.forceWrite(content: material.caCertificatePEM, to: "localCA.pem")
+
+			try material.caCertificateDER.write(
+				to: localCertificateAuthorityUrl,
+				options: .atomic
+			)
+
+			ServerInstaller.invalidateSSLCertificateCache()
+			return true
+		} catch {
+			return false
 		}
 	}
 
-	static func downloadSSLCertificates(
-		from urlString: String,
-		completion: @escaping (Bool) -> Void
-	) {
-		let generator = UINotificationFeedbackGenerator()
-		generator.prepare()
-		
-		NBFetchService().fetch(from: urlString) { (result: Result<ServerView.ServerPackModel, Error>) in
-			switch result {
-			case .success(let pack):
-				do {
-					try FileManager.forceWrite(content: pack.key, to: "server.pem")
-					try FileManager.forceWrite(content: pack.cert, to: "server.crt")
-					try FileManager.forceWrite(content: pack.info.domains.commonName, to: "commonName.txt")
-					ServerInstaller.invalidateSSLCertificateCache()
-					generator.notificationOccurred(.success)
-					completion(true)
-				} catch {
-					completion(false)
-				}
-			case .failure(_):
-				completion(false)
-			}
-		}
+	/// The authority, as a file iOS will offer to install as a profile.
+	static var localCertificateAuthorityUrl: URL {
+		URL.documentsDirectory.appendingPathComponent(LocalCertificateAuthority.caCertificateFileName)
+	}
+
+	static var hasLocalCertificateAuthority: Bool {
+		FileManager.default.fileExists(atPath: localCertificateAuthorityUrl.path)
 	}
 	
 	static func handleSource(

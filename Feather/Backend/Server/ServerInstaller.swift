@@ -46,7 +46,7 @@ class ServerInstaller: Identifiable, ObservableObject {
 		self._server = try? setupApp(port: port)
 
 		if _server == nil {
-			startupError = String.localized("The local server could not start. Open Settings → Installation → Server & SSL, tap Update SSL Certificates, then try again.")
+			startupError = String.localized("The local server could not start. Open Settings → Installation → Server & SSL and regenerate the local certificate.")
 		}
 	}
 		
@@ -116,7 +116,7 @@ class ServerInstaller: Identifiable, ObservableObject {
 		// a missing or expired one falls back to Semi Local (1) even when Fully
 		// Local was picked by hand — otherwise iOS is handed a link it refuses
 		// without reporting anything.
-		guard Self.hasSSLCertificates else {
+		guard Self.hasSSLCertificates, Self.localCertificateTrustIsEstablished() else {
 			return 1
 		}
 

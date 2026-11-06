@@ -33,9 +33,9 @@ struct FeatherApp: App {
 			UserDefaults.standard.set(["ar"] + fallbacks, forKey: "AppleLanguages")
 		}
 
-		// RaDown: the files the local HTTPS server installs through, fetched
-		// once in the background so the first install works without anyone
-		// having to find the button for it in Settings.
+		// RaDown: the certificate the local HTTPS server presents, made on the
+		// device. It used to be fetched from backloop.dev, which stopped
+		// issuing certificates in September 2026 and left every install stuck.
 		FR.ensureSSLCertificates()
 	}
 	
@@ -50,6 +50,11 @@ struct FeatherApp: App {
 					.transition(.move(edge: .top).combined(with: .opacity))
 			}
 			.animation(.smooth, value: downloadManager.manualDownloads.description)
+			// RaDown: the certificate is trusted in iOS Settings, outside this
+			// app, so whether it is trusted is rechecked on coming back.
+			.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+				ServerInstaller.invalidateLocalCertificateTrust()
+			}
 			.onReceive(NotificationCenter.default.publisher(for: .heartbeatInvalidHost)) { _ in
 				DispatchQueue.main.async {
 					UIAlertController.showAlertWithOk(

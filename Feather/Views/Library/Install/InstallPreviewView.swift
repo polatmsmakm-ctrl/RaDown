@@ -202,11 +202,11 @@ struct InstallPreviewView: View {
 	}
 
 	private func _reportInstallDidNotStart() {
-		FR.ensureSSLCertificates()
-
 		UIAlertController.showAlertWithOk(
 			title: .localized("Install"),
-			message: .localized("iOS did not start the installation. Open Settings → Installation → Server & SSL, tap Update SSL Certificates, then try again.")
+			message: installer.getServerMethod() == 1
+				? .localized("iOS did not start the installation. Check your internet connection and try again.")
+				: .localized("iOS did not start the installation. Open Settings → Installation → Server & SSL and trust the local certificate, or pick Semi Local there.")
 		)
 	}
 	

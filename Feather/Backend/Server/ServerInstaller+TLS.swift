@@ -11,6 +11,7 @@ import Foundation
 import NIOSSL
 import NIOTLS
 import Vapor
+import Security
 import SystemConfiguration.CaptiveNetwork
 
 // MARK: - Class extension: TLS/Setup
@@ -140,9 +141,85 @@ extension ServerInstaller {
 		return expiry.timeIntervalSinceNow < (3 * 24 * 60 * 60)
 	}
 
-	/// Fully Local once the certificates are there, Semi Local until then.
+	/// Whether iOS trusts the authority behind the server's certificate. A
+	/// private authority only counts once it has been installed and switched on
+	/// in Settings, and until then iOS drops the connection without a word, so
+	/// this decides whether Fully Local can work at all.
+	static func localCertificateTrustIsEstablished() -> Bool {
+		_trustLock.lock()
+		defer { _trustLock.unlock() }
+
+		if let cached = _trusted {
+			return cached
+		}
+
+		let result = _evaluateLocalCertificateTrust()
+		_trusted = result
+		return result
+	}
+
+	static func invalidateLocalCertificateTrust() {
+		_trustLock.lock()
+		_trusted = nil
+		_trustLock.unlock()
+	}
+
+	private static let _trustLock = NSLock()
+	private static var _trusted: Bool?
+
+	private static func _evaluateLocalCertificateTrust() -> Bool {
+		guard
+			let crt = getUrl("server", ext: "crt"),
+			let pem = try? String(contentsOf: crt, encoding: .utf8)
+		else {
+			return false
+		}
+
+		let certificates = _secCertificates(fromPEM: pem)
+
+		guard !certificates.isEmpty else {
+			return false
+		}
+
+		let policy = SecPolicyCreateSSL(true, LocalCertificateAuthority.host as CFString)
+		var trust: SecTrust?
+
+		guard
+			SecTrustCreateWithCertificates(certificates as CFArray, policy, &trust) == errSecSuccess,
+			let trust
+		else {
+			return false
+		}
+
+		return SecTrustEvaluateWithError(trust, nil)
+	}
+
+	private static func _secCertificates(fromPEM pem: String) -> [SecCertificate] {
+		let begin = "-----BEGIN CERTIFICATE-----"
+		let end = "-----END CERTIFICATE-----"
+
+		return pem.components(separatedBy: begin).dropFirst().compactMap { block in
+			guard let body = block.components(separatedBy: end).first else { return nil }
+
+			let base64 = body
+				.components(separatedBy: .whitespacesAndNewlines)
+				.joined()
+
+			guard
+				let der = Data(base64Encoded: base64),
+				let certificate = SecCertificateCreateWithData(nil, der as CFData)
+			else {
+				return nil
+			}
+
+			return certificate
+		}
+	}
+
+	/// Fully Local once there is a certificate iOS both accepts and trusts,
+	/// Semi Local until then.
 	static var defaultServerMethod: Int {
-		hasSSLCertificates ? 0 : 1
+		(hasSSLCertificates && localCertificateTrustIsEstablished()) ? 0 : 1
 	}
 
 	func readCommonName() -> String? {
