@@ -1,0 +1,108 @@
+{
+  "name": "تطبيقات راشد",
+  "identifier": "rashid.radown.source",
+  "subtitle": "Rashid's apps",
+  "description": "كل تطبيقات راشد، تتحدّث تلقائيًا مع كل إصدار جديد.",
+  "website": "https://github.com/polatmsmakm-ctrl",
+  "tintColor": "848ef9",
+  "iconURL": "https://raw.githubusercontent.com/polatmsmakm-ctrl/RaDown/main/icons/Basma.png",
+  "apps": [
+    {
+      "_repo": "Basma",
+      "_stamp": "latest|2026-10-23T04:41:48Z",
+      "name": "بصمتي",
+      "bundleIdentifier": "com.rashid.basma",
+      "developerName": "Rashid",
+      "localizedDescription": "بصمتي",
+      "iconURL": "https://raw.githubusercontent.com/polatmsmakm-ctrl/RaDown/main/icons/Basma.png",
+      "tintColor": "848ef9",
+      "version": "1.0",
+      "versionDate": "2026-10-23T04:41:48Z",
+      "size": 2978478,
+      "downloadURL": "https://github.com/polatmsmakm-ctrl/Basma/releases/download/latest/Basma-Lite.ipa",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-10-23T04:41:48Z",
+          "size": 2978478,
+          "downloadURL": "https://github.com/polatmsmakm-ctrl/Basma/releases/download/latest/Basma-Lite.ipa",
+          "localizedDescription": null,
+          "minOSVersion": "16.0"
+        }
+      ]
+    },
+    {
+      "_repo": "Duroosi",
+      "_stamp": "latest|2026-10-24T09:58:32Z",
+      "name": "دروسي",
+      "bundleIdentifier": "com.rashid.duroosi",
+      "developerName": "Rashid",
+      "localizedDescription": "دروسي",
+      "iconURL": "https://raw.githubusercontent.com/polatmsmakm-ctrl/RaDown/main/icons/Duroosi.png",
+      "tintColor": "848ef9",
+      "version": "1.0",
+      "versionDate": "2026-10-24T09:58:32Z",
+      "size": 10480790,
+      "downloadURL": "https://github.com/polatmsmakm-ctrl/Duroosi/releases/download/latest/Duroosi.ipa",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-10-24T09:58:32Z",
+          "size": 10480790,
+          "downloadURL": "https://github.com/polatmsmakm-ctrl/Duroosi/releases/download/latest/Duroosi.ipa",
+          "localizedDescription": "Latest build",
+          "minOSVersion": "16.0"
+        }
+      ]
+    },
+    {
+      "_repo": "Shilla",
+      "_stamp": "build-21|2026-11-05T14:06:27Z",
+      "name": "Jelly Jum",
+      "bundleIdentifier": "com.rashid.shilla",
+      "developerName": "Rashid",
+      "localizedDescription": "Jelly Jum",
+      "iconURL": "https://raw.githubusercontent.com/polatmsmakm-ctrl/RaDown/main/icons/Shilla.png",
+      "tintColor": "848ef9",
+      "version": "1.3",
+      "versionDate": "2026-11-05T14:06:27Z",
+      "size": 6310423,
+      "downloadURL": "https://github.com/polatmsmakm-ctrl/Shilla/releases/download/build-21/JellyJum.ipa",
+      "versions": [
+        {
+          "version": "1.3",
+          "date": "2026-11-05T14:06:27Z",
+          "size": 6310423,
+          "downloadURL": "https://github.com/polatmsmakm-ctrl/Shilla/releases/download/build-21/JellyJum.ipa",
+          "localizedDescription": "Unsigned IPA. Sign and install with Sideloadly.",
+          "minOSVersion": "16.0"
+        }
+      ]
+    },
+    {
+      "_repo": "videomerger",
+      "_stamp": "videomerger|2026-10-17T21:38:10Z",
+      "name": "VoiceMerger",
+      "bundleIdentifier": "com.videomerger.app",
+      "developerName": "Rashid",
+      "localizedDescription": "VoiceMerger",
+      "iconURL": "https://raw.githubusercontent.com/polatmsmakm-ctrl/RaDown/main/icons/videomerger.png",
+      "tintColor": "848ef9",
+      "version": "1.0",
+      "versionDate": "2026-10-17T21:38:10Z",
+      "size": 4662281,
+      "downloadURL": "https://github.com/polatmsmakm-ctrl/videomerger/releases/download/videomerger/VideoMerger.ipa",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-10-17T21:38:10Z",
+          "size": 4662281,
+          "downloadURL": "https://github.com/polatmsmakm-ctrl/videomerger/releases/download/videomerger/VideoMerger.ipa",
+          "localizedDescription": "IPA غير موقّع لـ Sideloadly",
+          "minOSVersion": "16.0"
+        }
+      ]
+    }
+  ],
+  "news": []
+}
