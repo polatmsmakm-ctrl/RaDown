@@ -317,12 +317,16 @@ extension LibraryView {
 		{
 			let hasExpired = expiration <= Date()
 
+			// Built as a String first: the key-based overload cannot take the
+			// remaining time as an argument.
+			let headline: String = hasExpired
+				? String.localized("Your certificate has expired")
+				: String.localized("Your certificate expires in %@", arguments: expiration.expirationInfo().formatted)
+
 			Section {
 				VStack(alignment: .leading, spacing: 8) {
 					Label(
-						hasExpired
-							? .localized("Your certificate has expired")
-							: .localized("Your certificate expires in %@", arguments: expiration.expirationInfo().formatted),
+						headline,
 						systemImage: hasExpired ? "xmark.octagon.fill" : "clock.badge.exclamationmark"
 					)
 					.font(.headline)
