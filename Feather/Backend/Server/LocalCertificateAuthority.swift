@@ -13,6 +13,10 @@
 //  the authority has to be trusted once in Settings, after which the install
 //  server works offline, forever.
 //
+//  Every X509 type is written out in full here, because the app has a
+//  `Certificate` of its own for signing certificates and it would otherwise
+//  win the name.
+//
 
 import Foundation
 import Crypto
@@ -40,26 +44,26 @@ enum LocalCertificateAuthority {
 		// The authority. Ten years, because the person installing it should not
 		// have to repeat the trust steps.
 		let caKey = P256.Signing.PrivateKey()
-		let caPrivateKey = Certificate.PrivateKey(caKey)
+		let caPrivateKey = X509.Certificate.PrivateKey(caKey)
 
-		let caName = try DistinguishedName {
-			CommonName("RaDown Local CA")
-			OrganizationName("RaDown")
+		let caName = try X509.DistinguishedName {
+			X509.CommonName("RaDown Local CA")
+			X509.OrganizationName("RaDown")
 		}
 
-		let caCertificate = try Certificate(
-			version: .v3,
-			serialNumber: Certificate.SerialNumber(),
+		let caCertificate = try X509.Certificate(
+			version: X509.Certificate.Version.v3,
+			serialNumber: X509.Certificate.SerialNumber(),
 			publicKey: caPrivateKey.publicKey,
 			notValidBefore: now.addingTimeInterval(-60 * 60),
 			notValidAfter: now.addingTimeInterval(10 * 365 * 24 * 60 * 60),
 			issuer: caName,
 			subject: caName,
-			signatureAlgorithm: .ecdsaWithSHA256,
-			extensions: try Certificate.Extensions {
-				Critical(BasicConstraints.isCertificateAuthority(maxPathLength: 0))
-				Critical(KeyUsage(keyCertSign: true, cRLSign: true))
-				SubjectKeyIdentifier(hash: caPrivateKey.publicKey)
+			signatureAlgorithm: X509.Certificate.SignatureAlgorithm.ecdsaWithSHA256,
+			extensions: try X509.Certificate.Extensions {
+				Critical(X509.BasicConstraints.isCertificateAuthority(maxPathLength: 0))
+				Critical(X509.KeyUsage(keyCertSign: true, cRLSign: true))
+				X509.SubjectKeyIdentifier(hash: caPrivateKey.publicKey)
 			},
 			issuerPrivateKey: caPrivateKey
 		)
@@ -68,31 +72,31 @@ enum LocalCertificateAuthority {
 		// that run longer than 825 days, so this one is deliberately short and
 		// is replaced whenever it gets close to expiring.
 		let serverKey = P256.Signing.PrivateKey()
-		let serverPrivateKey = Certificate.PrivateKey(serverKey)
+		let serverPrivateKey = X509.Certificate.PrivateKey(serverKey)
 
-		let serverName = try DistinguishedName {
-			CommonName(host)
-			OrganizationName("RaDown")
+		let serverName = try X509.DistinguishedName {
+			X509.CommonName(host)
+			X509.OrganizationName("RaDown")
 		}
 
-		let serverCertificate = try Certificate(
-			version: .v3,
-			serialNumber: Certificate.SerialNumber(),
+		let serverCertificate = try X509.Certificate(
+			version: X509.Certificate.Version.v3,
+			serialNumber: X509.Certificate.SerialNumber(),
 			publicKey: serverPrivateKey.publicKey,
 			notValidBefore: now.addingTimeInterval(-60 * 60),
 			notValidAfter: now.addingTimeInterval(395 * 24 * 60 * 60),
 			issuer: caName,
 			subject: serverName,
-			signatureAlgorithm: .ecdsaWithSHA256,
-			extensions: try Certificate.Extensions {
-				Critical(BasicConstraints.notCertificateAuthority)
-				Critical(KeyUsage(digitalSignature: true, keyEncipherment: true))
-				try ExtendedKeyUsage([.serverAuth])
-				SubjectAlternativeNames([
-					.dnsName("localhost"),
-					.ipAddress(ASN1OctetString(contentBytes: [127, 0, 0, 1])),
+			signatureAlgorithm: X509.Certificate.SignatureAlgorithm.ecdsaWithSHA256,
+			extensions: try X509.Certificate.Extensions {
+				Critical(X509.BasicConstraints.notCertificateAuthority)
+				Critical(X509.KeyUsage(digitalSignature: true, keyEncipherment: true))
+				try X509.ExtendedKeyUsage([X509.ExtendedKeyUsage.Usage.serverAuth])
+				X509.SubjectAlternativeNames([
+					X509.GeneralName.dnsName("localhost"),
+					X509.GeneralName.ipAddress(ASN1OctetString(contentBytes: [127, 0, 0, 1])),
 				])
-				SubjectKeyIdentifier(hash: serverPrivateKey.publicKey)
+				X509.SubjectKeyIdentifier(hash: serverPrivateKey.publicKey)
 			},
 			issuerPrivateKey: caPrivateKey
 		)
