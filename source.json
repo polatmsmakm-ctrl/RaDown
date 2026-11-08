@@ -80,6 +80,30 @@
       ]
     },
     {
+      "_repo": "Memora",
+      "_stamp": "build-3|2026-11-08T11:47:05Z",
+      "name": "Memora",
+      "bundleIdentifier": "com.rashid.memora",
+      "developerName": "Rashid",
+      "localizedDescription": "Memora",
+      "iconURL": "https://raw.githubusercontent.com/polatmsmakm-ctrl/RaDown/main/icons/Memora.png",
+      "tintColor": "848ef9",
+      "version": "1.0.0",
+      "versionDate": "2026-11-08T11:47:05Z",
+      "size": 3113885,
+      "downloadURL": "https://github.com/polatmsmakm-ctrl/Memora/releases/download/build-3/Memora.ipa",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2026-11-08T11:47:05Z",
+          "size": 3113885,
+          "downloadURL": "https://github.com/polatmsmakm-ctrl/Memora/releases/download/build-3/Memora.ipa",
+          "localizedDescription": "Unsigned IPA. Install with Sideloadly using your Apple Developer account.\n",
+          "minOSVersion": "17.0"
+        }
+      ]
+    },
+    {
       "_repo": "Shilla",
       "_stamp": "build-21|2026-11-05T14:06:27Z",
       "name": "Jelly Jum",
