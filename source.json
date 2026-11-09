@@ -81,7 +81,7 @@
     },
     {
       "_repo": "Memora",
-      "_stamp": "build-4|2026-11-09T06:03:02Z",
+      "_stamp": "build-8|2026-11-09T16:21:57Z",
       "name": "Memora",
       "bundleIdentifier": "com.rashid.memora",
       "developerName": "Rashid",
@@ -89,15 +89,15 @@
       "iconURL": "https://raw.githubusercontent.com/polatmsmakm-ctrl/RaDown/main/icons/Memora.png",
       "tintColor": "848ef9",
       "version": "1.0.0",
-      "versionDate": "2026-11-09T06:03:02Z",
-      "size": 3162450,
-      "downloadURL": "https://github.com/polatmsmakm-ctrl/Memora/releases/download/build-4/Memora.ipa",
+      "versionDate": "2026-11-09T16:21:57Z",
+      "size": 3302753,
+      "downloadURL": "https://github.com/polatmsmakm-ctrl/Memora/releases/download/build-8/Memora.ipa",
       "versions": [
         {
           "version": "1.0.0",
-          "date": "2026-11-09T06:03:02Z",
-          "size": 3162450,
-          "downloadURL": "https://github.com/polatmsmakm-ctrl/Memora/releases/download/build-4/Memora.ipa",
+          "date": "2026-11-09T16:21:57Z",
+          "size": 3302753,
+          "downloadURL": "https://github.com/polatmsmakm-ctrl/Memora/releases/download/build-8/Memora.ipa",
           "localizedDescription": "Unsigned IPA. Install with Sideloadly using your Apple Developer account.\n",
           "minOSVersion": "17.0"
         }
