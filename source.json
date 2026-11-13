@@ -105,7 +105,7 @@
     },
     {
       "_repo": "NightFall3D",
-      "_stamp": "latest|2026-11-13T06:52:24Z",
+      "_stamp": "latest|2026-11-13T17:56:09Z",
       "name": "NightFall",
       "bundleIdentifier": "com.rashid.nightfall",
       "developerName": "Rashid",
@@ -113,14 +113,14 @@
       "iconURL": "https://raw.githubusercontent.com/polatmsmakm-ctrl/RaDown/main/icons/NightFall3D.png",
       "tintColor": "848ef9",
       "version": "0.1.0",
-      "versionDate": "2026-11-13T06:52:24Z",
-      "size": 35628531,
+      "versionDate": "2026-11-13T17:56:09Z",
+      "size": 78420585,
       "downloadURL": "https://github.com/polatmsmakm-ctrl/NightFall3D/releases/download/latest/Nightfall.ipa",
       "versions": [
         {
           "version": "0.1.0",
-          "date": "2026-11-13T06:52:24Z",
-          "size": 35628531,
+          "date": "2026-11-13T17:56:09Z",
+          "size": 78420585,
           "downloadURL": "https://github.com/polatmsmakm-ctrl/NightFall3D/releases/download/latest/Nightfall.ipa",
           "localizedDescription": "Unsigned IPA for Sideloadly",
           "minOSVersion": "14.0"
