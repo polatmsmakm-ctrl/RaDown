@@ -104,30 +104,6 @@
       ]
     },
     {
-      "_repo": "NightFall3D",
-      "_stamp": "latest|2026-11-13T17:56:09Z",
-      "name": "NightFall",
-      "bundleIdentifier": "com.rashid.nightfall",
-      "developerName": "Rashid",
-      "localizedDescription": "NightFall",
-      "iconURL": "https://raw.githubusercontent.com/polatmsmakm-ctrl/RaDown/main/icons/NightFall3D.png",
-      "tintColor": "848ef9",
-      "version": "0.1.0",
-      "versionDate": "2026-11-13T17:56:09Z",
-      "size": 78420585,
-      "downloadURL": "https://github.com/polatmsmakm-ctrl/NightFall3D/releases/download/latest/Nightfall.ipa",
-      "versions": [
-        {
-          "version": "0.1.0",
-          "date": "2026-11-13T17:56:09Z",
-          "size": 78420585,
-          "downloadURL": "https://github.com/polatmsmakm-ctrl/NightFall3D/releases/download/latest/Nightfall.ipa",
-          "localizedDescription": "Unsigned IPA for Sideloadly",
-          "minOSVersion": "14.0"
-        }
-      ]
-    },
-    {
       "_repo": "Shilla",
       "_stamp": "build-21|2026-11-05T14:06:27Z",
       "name": "Jelly Jum",
